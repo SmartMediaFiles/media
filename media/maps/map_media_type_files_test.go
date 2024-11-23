@@ -1,9 +1,10 @@
 package maps
 
 import (
+	"testing"
+
 	"github.com/smartmediafiles/media/media/types"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 var fileTypeJpeg = types.FileType("jpeg")

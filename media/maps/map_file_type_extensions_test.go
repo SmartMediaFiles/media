@@ -1,9 +1,10 @@
 package maps
 
 import (
-	"github.com/smartmediafiles/media/media/types"
 	"reflect"
 	"testing"
+
+	"github.com/smartmediafiles/media/media/types"
 )
 
 var fileTypeImage = types.FileType("image")

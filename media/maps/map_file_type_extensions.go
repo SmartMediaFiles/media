@@ -1,8 +1,9 @@
 package maps
 
 import (
-	"github.com/smartmediafiles/media/media/types"
 	"path/filepath"
+
+	"github.com/smartmediafiles/media/media/types"
 )
 
 // MapFileTypeExtensions is a map of file types to file extensions.
