@@ -7,18 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var fileTypeJpeg = types.FileType("jpeg")
-var fileTypePng = types.FileType("png")
-var fileTypeMp4 = types.FileType("mp4")
-
-var fileExtensionJpg = types.FileExtension("jpg")
-var fileExtensionJpeg = types.FileExtension("jpeg")
-var fileExtensionPng = types.FileExtension("png")
-var fileExtensionMp4 = types.FileExtension("mp4")
-
-var mediaTypeImage = types.MediaType("image")
-var mediaTypeVideo = types.MediaType("video")
-
 func TestMapMediaTypeFiles(t *testing.T) {
 	// Création d'un MapMediaTypeFiles de test
 	testMap := MapMediaTypeFiles{
@@ -31,31 +19,103 @@ func TestMapMediaTypeFiles(t *testing.T) {
 		},
 	}
 
+	// TestGetMedia verifies that the method returns the correct MapFileTypeExtensions for a given media type,
+	// and returns nil for a non-existent media type.
 	t.Run("GetMedia", func(t *testing.T) {
+		expected := MapFileTypeExtensions{
+			fileTypeJpeg: {fileExtensionJpg, fileExtensionJpeg},
+			fileTypePng:  {fileExtensionPng},
+		}
 		result := testMap.GetMedia(mediaTypeImage)
-		assert.Equal(t, 2, len(result), "Should have 2 file types for MediaTypeImage")
-		assert.Contains(t, result, fileTypeJpeg, "Should contain FileTypeJPEG")
-		assert.Contains(t, result, fileTypePng, "Should contain FileTypePNG")
+		assert.Equal(t, expected, result, "Should return correct map for media type")
+
+		resultNil := testMap.GetMedia(mediaTypeFake)
+		assert.Nil(t, resultNil, "Should return nil for non-existent media type")
 	})
 
+	// TestGetMediaTypes ensures that all media type keys are correctly returned.
 	t.Run("GetMediaTypes", func(t *testing.T) {
+		expected := []types.MediaType{mediaTypeImage, mediaTypeVideo}
 		result := testMap.GetMediaTypes()
-		assert.Equal(t, 2, len(result), "Should return 2 media types")
-		assert.Contains(t, result, mediaTypeImage, "Should contain MediaTypeImage")
-		assert.Contains(t, result, mediaTypeVideo, "Should contain MediaTypeVideo")
+		assert.ElementsMatch(t, expected, result, "Should return all media types")
 	})
 
+	// TestGetFileTypes checks that the method returns the correct file types for a given media type.
 	t.Run("GetFileTypes", func(t *testing.T) {
-		result := testMap.GetFileTypes(mediaTypeImage)
-		assert.Equal(t, 2, len(result), "Should return 2 file types for MediaTypeImage")
-		assert.Contains(t, result, fileTypeJpeg, "Should contain FileTypeJPEG")
-		assert.Contains(t, result, fileTypePng, "Should contain FileTypePNG")
+		tests := []struct {
+			name      string
+			mediaType types.MediaType
+			want      []types.FileType
+		}{
+			{
+				name:      "Image file types",
+				mediaType: mediaTypeImage,
+				want:      []types.FileType{fileTypeJpeg, fileTypePng},
+			},
+			{
+				name:      "Video file types",
+				mediaType: mediaTypeVideo,
+				want:      []types.FileType{fileTypeMp4},
+			},
+			{
+				name:      "Fake media type",
+				mediaType: mediaTypeFake,
+				want:      []types.FileType{},
+			},
+		}
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				result := testMap.GetFileTypes(tt.mediaType)
+				assert.ElementsMatch(t, tt.want, result, "Should return correct file types for media type")
+			})
+		}
 	})
 
-	t.Run("GetFileExtensions", func(t *testing.T) {
-		result := testMap.GetExtensions(mediaTypeImage, fileTypeJpeg)
-		assert.Equal(t, 2, len(result), "Should return 2 extensions for JPEG")
-		assert.Contains(t, result, fileExtensionJpg, "Should contain FileExtensionJPG")
-		assert.Contains(t, result, fileExtensionJpeg, "Should contain FileExtensionJPEG")
+	// TestGetExtensions verifies that the correct extensions are returned for a specific media and file type combination.
+	t.Run("GetExtensions", func(t *testing.T) {
+		tests := []struct {
+			name      string
+			mediaType types.MediaType
+			fileType  types.FileType
+			want      []types.FileExtension
+		}{
+			{
+				name:      "Image JPEG extensions",
+				mediaType: mediaTypeImage,
+				fileType:  fileTypeJpeg,
+				want:      []types.FileExtension{fileExtensionJpg, fileExtensionJpeg},
+			},
+			{
+				name:      "Image PNG extensions",
+				mediaType: mediaTypeImage,
+				fileType:  fileTypePng,
+				want:      []types.FileExtension{fileExtensionPng},
+			},
+			{
+				name:      "Video MP4 extensions",
+				mediaType: mediaTypeVideo,
+				fileType:  fileTypeMp4,
+				want:      []types.FileExtension{fileExtensionMp4},
+			},
+			{
+				name:      "Fake media type",
+				mediaType: mediaTypeFake,
+				fileType:  fileTypeJpeg,
+				want:      nil,
+			},
+			{
+				name:      "Image with fake file type",
+				mediaType: mediaTypeImage,
+				fileType:  types.FileType("fake"),
+				want:      nil,
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				result := testMap.GetExtensions(tt.mediaType, tt.fileType)
+				assert.Equal(t, tt.want, result, "Should return correct extensions")
+			})
+		}
 	})
 }
