@@ -52,7 +52,7 @@ func TestMapMediaTypeFiles(t *testing.T) {
 		assert.Contains(t, result, fileTypePng, "Should contain FileTypePNG")
 	})
 
-	t.Run("GetExtensions", func(t *testing.T) {
+	t.Run("GetFileExtensions", func(t *testing.T) {
 		result := testMap.GetExtensions(mediaTypeImage, fileTypeJpeg)
 		assert.Equal(t, 2, len(result), "Should return 2 extensions for JPEG")
 		assert.Contains(t, result, fileExtensionJpg, "Should contain FileExtensionJPG")

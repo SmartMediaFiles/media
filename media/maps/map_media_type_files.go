@@ -1,6 +1,9 @@
 package maps
 
-import "github.com/smartmediafiles/media/media/types"
+import (
+	"github.com/smartmediafiles/media"
+	"github.com/smartmediafiles/media/media/types"
+)
 
 // MapMediaTypeFiles is a map of media types to their file types and extensions.
 type MapMediaTypeFiles map[types.MediaType]MapFileTypeExtensions

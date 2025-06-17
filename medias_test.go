@@ -50,7 +50,7 @@ func Test_MediaImage(t *testing.T) {
 	}
 
 	// Get extensions of the first file type
-	imgExts := images.GetExtensions(fileTypes[0])
+	imgExts := images.GetFileExtensions(fileTypes[0])
 
 	// Check if imgExts is empty
 	if len(imgExts) == 0 {
@@ -63,5 +63,25 @@ func Test_MediaImage(t *testing.T) {
 	// check if allExts is empty
 	if len(allExts) == 0 {
 		t.Errorf("Expected allExts to have at least one element")
+	}
+}
+
+func Test_GetMediaTypeByExtension(t *testing.T) {
+	// Define a map of extensions to expected media types
+	extensionToMediaType := map[string]string{
+		".jpg": "Image",
+		".png": "Image",
+		".mp3": "Audio",
+		".mp4": "Video",
+	}
+
+	for ext, expectedType := range extensionToMediaType {
+		// Get the media type for the given extension
+		mediaType := Medias.GetMediaTypeByExtension(ext)
+
+		// Check if the media type matches the expected type
+		if mediaType != expectedType {
+			t.Errorf("Expected media type for extension %s to be %s, but got %s", ext, expectedType, mediaType)
+		}
 	}
 }

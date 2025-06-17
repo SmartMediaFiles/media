@@ -43,8 +43,8 @@ func (m MapFileTypeExtensions) GetFileType(fileExtension types.FileExtension) ty
 	return ""
 }
 
-// GetExtensions returns a list of file extensions for the given file type.
-func (m MapFileTypeExtensions) GetExtensions(fileType types.FileType) []types.FileExtension {
+// GetFileExtensions returns a list of file extensions for the given file type.
+func (m MapFileTypeExtensions) GetFileExtensions(fileType types.FileType) []types.FileExtension {
 	return m[fileType]
 }
 

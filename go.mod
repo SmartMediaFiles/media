@@ -1,6 +1,6 @@
 module github.com/smartmediafiles/media
 
-go 1.23.1
+go 1.24
 
 require (
 	github.com/smartmediafiles/media.image v0.0.0-20241006190546-b2362cb653ac
@@ -19,9 +19,9 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-//replace github.com/smartmediafiles/media.image => ../media.image
-//replace github.com/smartmediafiles/media.sidecar => ../media.sidecar
-//replace github.com/smartmediafiles/media.unknown => ../media.unknown
-//replace github.com/smartmediafiles/media.raw => ../media.raw
-//replace github.com/smartmediafiles/media.vector => ../media.vector
-//replace github.com/smartmediafiles/media.video => ../media.video
+replace github.com/smartmediafiles/media.image => ../media.image
+replace github.com/smartmediafiles/media.sidecar => ../media.sidecar
+replace github.com/smartmediafiles/media.unknown => ../media.unknown
+replace github.com/smartmediafiles/media.raw => ../media.raw
+replace github.com/smartmediafiles/media.vector => ../media.vector
+replace github.com/smartmediafiles/media.video => ../media.video
