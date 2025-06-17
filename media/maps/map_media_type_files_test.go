@@ -26,10 +26,10 @@ func TestMapMediaTypeFiles(t *testing.T) {
 			fileTypeJpeg: {fileExtensionJpg, fileExtensionJpeg},
 			fileTypePng:  {fileExtensionPng},
 		}
-		result := testMap.GetMedia(mediaTypeImage)
+		result := testMap.GetFileTypeExtensions(mediaTypeImage)
 		assert.Equal(t, expected, result, "Should return correct map for media type")
 
-		resultNil := testMap.GetMedia(mediaTypeFake)
+		resultNil := testMap.GetFileTypeExtensions(mediaTypeFake)
 		assert.Nil(t, resultNil, "Should return nil for non-existent media type")
 	})
 
@@ -115,6 +115,63 @@ func TestMapMediaTypeFiles(t *testing.T) {
 			t.Run(tt.name, func(t *testing.T) {
 				result := testMap.GetExtensions(tt.mediaType, tt.fileType)
 				assert.Equal(t, tt.want, result, "Should return correct extensions")
+			})
+		}
+	})
+
+	// TestGetMediaTypeByExtension verifies that GetMediaTypeByExtension correctly finds the media type for an extension.
+	t.Run("GetMediaTypeByExtension", func(t *testing.T) {
+		tests := []struct {
+			name      string
+			extension types.FileExtension
+			want      types.MediaType
+		}{
+			{
+				name:      "find jpg",
+				extension: fileExtensionJpg,
+				want:      mediaTypeImage,
+			},
+			{
+				name:      "find jpeg",
+				extension: fileExtensionJpeg,
+				want:      mediaTypeImage,
+			},
+			{
+				name:      "find png",
+				extension: fileExtensionPng,
+				want:      mediaTypeImage,
+			},
+			{
+				name:      "find mp4",
+				extension: fileExtensionMp4,
+				want:      mediaTypeVideo,
+			},
+			{
+				name:      "find case-insensitive JPG",
+				extension: types.FileExtension(".JPG"),
+				want:      mediaTypeImage,
+			},
+			{
+				name:      "find case-insensitive JPEG",
+				extension: types.FileExtension(".jPeG"),
+				want:      mediaTypeImage,
+			},
+			{
+				name:      "not found",
+				extension: types.FileExtension(".gif"),
+				want:      "",
+			},
+			{
+				name:      "empty extension",
+				extension: types.FileExtension(""),
+				want:      "",
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				got := testMap.GetMediaTypeByExtension(tt.extension)
+				assert.Equal(t, tt.want, got)
 			})
 		}
 	})

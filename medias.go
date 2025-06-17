@@ -84,3 +84,14 @@ var Medias = maps.MapMediaTypeFiles{
 	Sidecar: media_sidecar.SidecarFileTypesExtensions,
 	Unknown: media_unknown.UnknownFileTypesExtensions,
 }
+
+// GetMediaTypeByExtension iterates through the entire Medias registry to find
+// the corresponding MediaType for a given file extension.
+// The search is case-insensitive. If no match is found, it returns the Unknown type.
+func GetMediaTypeByExtension(extension types.FileExtension) types.MediaType {
+	mediaType := Medias.GetMediaTypeByExtension(extension)
+	if mediaType != "" {
+		return mediaType
+	}
+	return Unknown
+}
